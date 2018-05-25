@@ -34,7 +34,7 @@ public class SQLDao {
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("select * from shape")) {
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             // loop through the result set
             while (rs.next()) {

@@ -9,16 +9,23 @@ public class Volume extends Shape {
         this.height = height;
     }
 
+    Volume(Shape shape){
+        this.name = shape.name;
+        this.radius = shape.radius;
+        this.height = shape.height;
+        this.volume = getVolume();
+    }
+
     Volume() {
         name = "undefined";
         radius = 0;
         height = 0;
     }
-    public double CilinderVolume() {
+    private double CilinderVolume() {
         return Math.PI*Math.pow(this.radius,2.0)* this.height;
     }
 
-    public double ConeVolume() {
+    private double ConeVolume() {
         return 1/3*Math.PI*Math.pow(this.radius,2.0)* this.height;
     }
 
@@ -31,4 +38,5 @@ public class Volume extends Shape {
 
     }
 }
+
 

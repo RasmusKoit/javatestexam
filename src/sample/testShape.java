@@ -35,10 +35,13 @@ public class testShape extends Application {
         SQLDao dao = new SQLDao();
         Map<String, Shape> data = dao.selectAll();
         Shape Silinder = data.get("Silinder");
+        Volume SilinderVolume = new Volume(Silinder);
+        System.out.println("girrlrl");
+        System.out.println(SilinderVolume.volume);
         Silinder.give_info();
         System.out.println(Silinder.height);
 
-        launch(args);
+        //launch(args);
 
     }
 }

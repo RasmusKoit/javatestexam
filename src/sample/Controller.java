@@ -48,6 +48,8 @@ public class Controller {
     static Shape Cilinder = data.get("Silinder");
     static Shape Cone = data.get("Koonus");
     static Shape Ball = data.get("Pall");
+    static Volume BallVolume = new Volume(Ball);
+
 
 
     public void vajuta(MouseEvent event) {
@@ -192,6 +194,7 @@ public class Controller {
             gc.clearRect(0, 0, 550, 550);
             gc.setFill(Color.rgb(r1, r2, r3));
             gc.fillRect(0, 0, 550, 550);
+
 
 
             //tyhjendan arrayd.
