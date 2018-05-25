@@ -39,7 +39,7 @@ public class SQLDao {
             // loop through the result set
             while (rs.next()) {
                 Shape shape = new Shape();
-                //Use ID instead of shape.name for key in dictionary if multiple same shapes
+                //Use ID instead of shape.name for key in dictionary if multiple same named shapes
                 //String id = rs.getString("id");
                 shape.name = rs.getString("name");
                 shape.radius = rs.getFloat("radius");

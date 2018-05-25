@@ -82,15 +82,18 @@ public class Controller {
 
     private static void DrawCilinder(GraphicsContext gc) {
         Random rand = new Random();
-/*        double x = s + (400 - s) * rand.nextDouble();
+/*      double x = s + (400 - s) * rand.nextDouble();
         double y = s + (400 - s) * rand.nextDouble();*/
         double x = rand.nextInt(300) + 1;
         double y = rand.nextInt(300) + 1;
         gc.setFill(Color.BLACK);
+
+        double[] dashes = { 2 };
+        gc.setLineDashes(dashes);
         //Drawing a cilinder.
         gc.strokeOval(x, y, Cilinder.radius, Cilinder.radius / 4);
-        gc.fillRect(x - 1, y + Cilinder.radius / 8, 1, Cilinder.height);
-        gc.fillRect(x + Cilinder.radius, y + Cilinder.radius / 8, 1, Cilinder.height);
+        gc.strokeLine(x - 1, y + Cilinder.radius / 8, x - 1, y + Cilinder.radius / 8 + Cilinder.height);
+        gc.strokeLine(x + Cilinder.radius, y + Cilinder.radius / 8, x + Cilinder.radius, y + Cilinder.radius / 8 + Cilinder.height);
         gc.strokeOval(x, y + Cilinder.height, Cilinder.radius, Cilinder.radius / 4);
 
 
@@ -113,6 +116,8 @@ public class Controller {
         double x = rand.nextInt(300) + 1;
         double y = rand.nextInt(200) + 1;
         gc.setFill(Color.BLACK);
+        gc.setLineDashes(1);
+
         //Drawing a cone.
         gc.strokeLine(x, y, x + Cone.radius, y + Cone.height);
         gc.strokeLine(x, y, x - Cone.radius, y + Cone.height);
@@ -134,7 +139,11 @@ public class Controller {
         double x = rand.nextInt(300) + 1;
         double y = rand.nextInt(300) + 1;
         //teen kera.
+        gc.setLineDashes(1);
         gc.strokeOval(x, y, Ball.radius, Ball.radius);
+
+        double[] dashes = { 2, 3, 6, 3 };
+        gc.setLineDashes(dashes);
         gc.strokeOval(x, y + 3 * Ball.radius / 8, Ball.radius, Ball.radius / 4);
         //adding chrods to array.
         ballChordX.add((int) x);

@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import static sample.Controller.dao;
+
 public class testShape extends Application {
 
     @Override
@@ -24,6 +26,12 @@ public class testShape extends Application {
         Shape sittKujund = new Shape();
 
 
+        Volume silindriRuumala = new Volume("Silinder", 60, 40);
+        Volume koonuseRuumala = new Volume("Koonus", 60, 40);
+        silindriRuumala.volume = silindriRuumala.getVolume();
+        koonuseRuumala.volume = koonuseRuumala.getVolume();
+        System.out.println(silindriRuumala.volume);
+        System.out.println(koonuseRuumala.volume);
         SQLDao dao = new SQLDao();
         Map<String, Shape> data = dao.selectAll();
         Shape Silinder = data.get("Silinder");
