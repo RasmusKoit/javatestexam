@@ -25,12 +25,12 @@ public class Controller {
     @FXML
     CheckBox check3 = new CheckBox();
 
-    private static ArrayList<Integer> silinderChordX = new ArrayList<>();
-    private static ArrayList<Integer> silinderChordY = new ArrayList<>();
-    private static ArrayList<Integer> coneChordX = new ArrayList<>();
-    private static ArrayList<Integer> coneChordY = new ArrayList<>();
-    private static ArrayList<Integer> ballChordX = new ArrayList<>();
-    private static ArrayList<Integer> ballChordY = new ArrayList<>();
+    private static ArrayList<Integer> pikkusChordX = new ArrayList<>();
+    private static ArrayList<Integer> pikkusChordY = new ArrayList<>();
+    private static ArrayList<Integer> laiusChordX = new ArrayList<>();
+    private static ArrayList<Integer> laiusChordY = new ArrayList<>();
+    private static ArrayList<Integer> uksChordX = new ArrayList<>();
+    private static ArrayList<Integer> uksChordY = new ArrayList<>();
     private static double s = 40; //to gen random
     private static int newX;
     private static int newY;
@@ -44,11 +44,9 @@ public class Controller {
 
     //Connect to Database and get info
     static SQLDao dao = new SQLDao();
-    static Map<String, Shape> data = dao.selectAll();
-    static Shape Cilinder = data.get("Silinder");
-    static Shape Cone = data.get("Koonus");
-    static Shape Ball = data.get("Pall");
-    static Volume BallVolume = new Volume(Ball);
+    static Map<String, sample.Tuba> data = dao.selectAll();
+    static sample.Tuba Tuba = data.get("13");
+    //static Volume BallVolume = new Volume(Ball);
 
 
 
@@ -61,129 +59,148 @@ public class Controller {
         if (check1.isSelected()) {
             if (!drawn1) {
                 drawn1 = true;
-                gc.fillText(Cilinder.name + " radius: " + Cilinder.radius + " height: " + Cilinder.height, 300, 400);
+                double pindala = (Tuba.laius * Tuba.pikkus) - (Tuba.uks - Tuba.uks);
+                gc.fillText(Tuba.name + " pikkus: " + Tuba.pikkus + " laius: " + Tuba.laius + " S: " + pindala, 200, 400);
             }
-            DrawCilinder(gc);
+            DrawRoom(gc);
         }
-        if (check2.isSelected()) {
-            if (!drawn2) {
-                drawn2 = true;
-                gc.fillText(Cone.name + " radius: " + Cone.radius + " height: " + Cone.height, 300, 385);
-            }
-            DrawCone(gc);
-        }
-        if (check3.isSelected()) {
-            if (!drawn3) {
-                drawn3 = true;
-                gc.fillText(Ball.name + " radius: " + Ball.radius, 300, 370);
-            }
-            DrawBall(gc);
+        int itemCount = pikkusChordX.size();
+        for (int i = 0; i < itemCount; i++) {
+            newX = pikkusChordX.get(i);
+            newY = pikkusChordY.get(i);
+            //GraphicsContext gc = joonis.getGraphicsContext2D();
+            DrawRoomColor(gc);
+
         }
 //
     }
 
-    private static void DrawCilinder(GraphicsContext gc) {
+    private static void DrawRoom(GraphicsContext gc) {
         Random rand = new Random();
 /*      double x = s + (400 - s) * rand.nextDouble();
         double y = s + (400 - s) * rand.nextDouble();*/
-        double x = rand.nextInt(300) + 1;
-        double y = rand.nextInt(300) + 1;
+        double x = 30;
+        double y = 30;
         gc.setFill(Color.BLACK);
 
-        double[] dashes = { 2 };
-        gc.setLineDashes(dashes);
-        //Drawing a cilinder.
-        gc.strokeOval(x, y, Cilinder.radius, Cilinder.radius / 4);
-        gc.strokeLine(x - 1, y + Cilinder.radius / 8, x - 1, y + Cilinder.radius / 8 + Cilinder.height);
-        gc.strokeLine(x + Cilinder.radius, y + Cilinder.radius / 8, x + Cilinder.radius, y + Cilinder.radius / 8 + Cilinder.height);
-        gc.strokeOval(x, y + Cilinder.height, Cilinder.radius, Cilinder.radius / 4);
+        //double[] dashes = { 2 };
+        //gc.setLineDashes(dashes);
+        //Drawing a room.
+//        gc.strokeOval(x, y, Cilinder.radius, Cilinder.radius / 4);
+//        gc.strokeLine(x - 1, y + Cilinder.radius / 8, x - 1, y + Cilinder.radius / 8 + Cilinder.height);
+//        gc.strokeLine(x + Cilinder.radius, y + Cilinder.radius / 8, x + Cilinder.radius, y + Cilinder.radius / 8 + Cilinder.height);
+//        gc.strokeOval(x, y + Cilinder.height, Cilinder.radius, Cilinder.radius / 4);
+        gc.strokeLine(x, y, x, Tuba.pikkus);
+        gc.strokeLine(x, Tuba.pikkus, Tuba.laius, Tuba.pikkus);
+        gc.strokeLine(Tuba.laius, Tuba.pikkus, Tuba.laius, Tuba.pikkus-100);
+        gc.strokeLine(Tuba.laius, Tuba.pikkus-100, Tuba.laius-Tuba.uks, Tuba.pikkus-100);
+        gc.strokeLine(Tuba.laius-Tuba.uks, Tuba.pikkus-100, Tuba.laius-Tuba.uks, Tuba.pikkus-100-Tuba.uks);
+        gc.strokeLine(Tuba.laius-Tuba.uks, Tuba.pikkus-100-Tuba.uks, Tuba.laius, Tuba.pikkus-100-Tuba.uks);
+        gc.strokeLine(Tuba.laius, Tuba.pikkus-100-Tuba.uks, Tuba.laius, Tuba.pikkus-Tuba.uks*3.5);
+        gc.strokeLine(Tuba.laius, Tuba.pikkus-100-Tuba.uks*2.5, Tuba.laius, y);
+        gc.strokeLine(Tuba.laius, y,x, y );
+
 
 
         //adding Chrods to array.
-        silinderChordX.add((int) x);
-        silinderChordY.add((int) y);
+        pikkusChordX.add((int) x);
+        pikkusChordY.add((int) y);
     }
 
-    private static void DrawCilinderColor(GraphicsContext gc) {
+    private static void DrawRoomColor(GraphicsContext gc) {
         //Coloring cilinder ovals with old chrods.
-        gc.setFill(Color.RED);
-        gc.fillOval(newX, newY, Cilinder.radius, Cilinder.radius / 4);
-        gc.fillOval(newX, newY + Cilinder.height, Cilinder.radius, Cilinder.radius / 4);
+        //gc.setFill(Color.RED);
+//        gc.fillOval(newX, newY, Cilinder.radius, Cilinder.radius / 4);
+//        gc.fillOval(newX, newY + Cilinder.height, Cilinder.radius, Cilinder.radius / 4);
+        gc.setStroke(Color.RED);
+        gc.strokeLine(newX, newY, newX, Tuba.pikkus);
+        gc.strokeLine(newX, Tuba.pikkus, Tuba.laius, Tuba.pikkus);
+        gc.strokeLine(Tuba.laius, Tuba.pikkus, Tuba.laius, Tuba.pikkus-100);
+        gc.strokeLine(Tuba.laius, Tuba.pikkus-100, Tuba.laius-Tuba.uks, Tuba.pikkus-100);
+        gc.strokeLine(Tuba.laius-Tuba.uks, Tuba.pikkus-100, Tuba.laius-Tuba.uks, Tuba.pikkus-100-Tuba.uks);
+        gc.strokeLine(Tuba.laius-Tuba.uks, Tuba.pikkus-100-Tuba.uks, Tuba.laius, Tuba.pikkus-100-Tuba.uks);
+        gc.strokeLine(Tuba.laius, Tuba.pikkus-100-Tuba.uks, Tuba.laius, Tuba.pikkus-Tuba.uks*3.5);
+        gc.strokeLine(Tuba.laius, Tuba.pikkus-100-Tuba.uks*2.5, Tuba.laius, newY);
+        gc.strokeLine(Tuba.laius, newY,newX, newY );
 
     }
 
 
-    private void DrawCone(GraphicsContext gc) {
-        Random rand = new Random();
-        double x = rand.nextInt(300) + 1;
-        double y = rand.nextInt(200) + 1;
-        gc.setFill(Color.BLACK);
-        gc.setLineDashes(1);
-
-        //Drawing a cone.
-        gc.strokeLine(x, y, x + Cone.radius, y + Cone.height);
-        gc.strokeLine(x, y, x - Cone.radius, y + Cone.height);
-        gc.strokeOval(x - Cone.radius, y + Cone.height - Cone.radius / 4, 2 * Cone.radius, Cone.radius / 2);
-        //adding chrods to array.
-        coneChordX.add((int) x);
-        coneChordY.add((int) y);
-    }
-
-    private static void DrawConeColor(GraphicsContext gc) {
-        //Coloring cilinder ovals with old chrods.
-        gc.setFill(Color.RED);
-        gc.fillOval(new1X - Cone.radius, new1Y + Cone.height - Cone.radius / 4, 2 * Cone.radius, Cone.radius / 2);
-    }
-
-
-    private static void DrawBall(GraphicsContext gc) {
-        Random rand = new Random();
-        double x = rand.nextInt(300) + 1;
-        double y = rand.nextInt(300) + 1;
-        //teen kera.
-        gc.setLineDashes(1);
-        gc.strokeOval(x, y, Ball.radius, Ball.radius);
-
-        double[] dashes = { 2, 3, 6, 3 };
-        gc.setLineDashes(dashes);
-        gc.strokeOval(x, y + 3 * Ball.radius / 8, Ball.radius, Ball.radius / 4);
-        //adding chrods to array.
-        ballChordX.add((int) x);
-        ballChordY.add((int) y);
-    }
-
-    private static void DrawBallColor(GraphicsContext gc) {
-        //Coloring cilinder ovals with old chrods.
-        gc.setFill(Color.RED);
-        gc.fillOval(new2X, new2Y + 3 * Ball.radius / 8, Ball.radius, Ball.radius / 4);
-    }
+//    private void DrawCone(GraphicsContext gc) {
+//        Random rand = new Random();
+//        double x = rand.nextInt(300) + 1;
+//        double y = rand.nextInt(200) + 1;
+//        gc.setFill(Color.BLACK);
+//        gc.setLineDashes(1);
+//
+//        //Drawing a cone.
+//        gc.strokeLine(x, y, x + Cone.radius, y + Cone.height);
+//        gc.strokeLine(x, y, x - Cone.radius, y + Cone.height);
+//        gc.strokeOval(x - Cone.radius, y + Cone.height - Cone.radius / 4, 2 * Cone.radius, Cone.radius / 2);
+//        //adding chrods to array.
+//        laiusChordX.add((int) x);
+//        laiusChordY.add((int) y);
+//    }
+//
+//    private static void DrawConeColor(GraphicsContext gc) {
+//        //Coloring cilinder ovals with old chrods.
+//        gc.setFill(Color.RED);
+//        gc.fillOval(new1X - Cone.radius, new1Y + Cone.height - Cone.radius / 4, 2 * Cone.radius, Cone.radius / 2);
+//    }
+//
+//
+//    private static void DrawBall(GraphicsContext gc) {
+//        Random rand = new Random();
+//        double x = rand.nextInt(300) + 1;
+//        double y = rand.nextInt(300) + 1;
+//        //teen kera.
+//        gc.setLineDashes(1);
+//        gc.strokeOval(x, y, Ball.radius, Ball.radius);
+//
+//        double[] dashes = { 2, 3, 6, 3 };
+//        gc.setLineDashes(dashes);
+//        gc.strokeOval(x, y + 3 * Ball.radius / 8, Ball.radius, Ball.radius / 4);
+//        //adding chrods to array.
+//        uksChordX.add((int) x);
+//        uksChordY.add((int) y);
+//    }
+//
+//    private static void DrawBallColor(GraphicsContext gc) {
+//        //Coloring cilinder ovals with old chrods.
+//        gc.setFill(Color.RED);
+//        gc.fillOval(new2X, new2Y + 3 * Ball.radius / 8, Ball.radius, Ball.radius / 4);
+//    }
 
     @FXML
     public void liiguta(KeyEvent event) {
 
         if (event.getCode() == KeyCode.ENTER) {
-            int itemCount = silinderChordX.size();
-            for (int i = 0; i < itemCount; i++) {
-                newX = silinderChordX.get(i);
-                newY = silinderChordY.get(i);
-                GraphicsContext gc = joonis.getGraphicsContext2D();
-                DrawCilinderColor(gc);
-
-            }
-            int itemCount1 = coneChordX.size();
-            for (int i = 0; i < itemCount1; i++) {
-                new1X = coneChordX.get(i);
-                new1Y = coneChordY.get(i);
-                GraphicsContext gc = joonis.getGraphicsContext2D();
-                DrawConeColor(gc);
-            }
-            int itemCount2 = ballChordX.size();
-            for (int i = 0; i < itemCount2; i++) {
-                new2X = ballChordX.get(i);
-                new2Y = ballChordY.get(i);
-                GraphicsContext gc = joonis.getGraphicsContext2D();
-                DrawBallColor(gc);
-            }
+            GraphicsContext gc = joonis.getGraphicsContext2D();
+            int itemCount = pikkusChordX.size();
+//            for (int i = 0; i < itemCount; i++) {
+//                newX = pikkusChordX.get(i);
+//                newY = pikkusChordY.get(i);
+//
+//
+//                DrawRoomColor(gc);
+//
+//            }
+            double pindala = (Tuba.laius * Tuba.pikkus) - (Tuba.uks - Tuba.uks);
+            gc.fillText(Tuba.name + " pikkus: " + Tuba.pikkus + " laius: " + Tuba.laius + " S: " + pindala, 200, 400);
+//            int itemCount1 = laiusChordX.size();
+//            for (int i = 0; i < itemCount1; i++) {
+//                new1X = laiusChordX.get(i);
+//                new1Y = laiusChordY.get(i);
+//                GraphicsContext gc = joonis.getGraphicsContext2D();
+//                DrawConeColor(gc);
+//            }
+//            int itemCount2 = uksChordX.size();
+//            for (int i = 0; i < itemCount2; i++) {
+//                new2X = uksChordX.get(i);
+//                new2Y = uksChordY.get(i);
+//                GraphicsContext gc = joonis.getGraphicsContext2D();
+//                DrawBallColor(gc);
+//            }
         }
         if (event.getCode() == KeyCode.F) {
             Random rand = new Random();
@@ -198,12 +215,12 @@ public class Controller {
 
 
             //tyhjendan arrayd.
-            silinderChordX = new ArrayList<>();
-            silinderChordY = new ArrayList<>();
-            coneChordX = new ArrayList<>();
-            coneChordY = new ArrayList<>();
-            ballChordX = new ArrayList<>();
-            ballChordY = new ArrayList<>();
+            pikkusChordX = new ArrayList<>();
+            pikkusChordY = new ArrayList<>();
+            laiusChordX = new ArrayList<>();
+            laiusChordY = new ArrayList<>();
+            uksChordX = new ArrayList<>();
+            uksChordY = new ArrayList<>();
             drawn1 = false;
             drawn2 = false;
             drawn3 = false;
@@ -212,6 +229,7 @@ public class Controller {
     }
 
     public void initialize() {
-
+        GraphicsContext gc = joonis.getGraphicsContext2D();
+        DrawRoom(gc);
     }
 }

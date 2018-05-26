@@ -12,7 +12,7 @@ public class SQLDao {
         /* Make sure to add sqlite driver (ctrl + alt + shift + s)
             Project Settings -> Modules -> + and add the jar file.
          */
-        String url = "jdbc:sqlite://C:/Users/raks4/IdeaProjects/EksamiksKordamine/src/sample/identifier.sqlite";
+        String url = "jdbc:sqlite:/home/rasmus/IdeaProjects/javatestexam2/src/sample/identifier.sqlite";
         Connection conn = null;
         try {
             DriverManager.registerDriver(new org.sqlite.JDBC());
@@ -27,10 +27,10 @@ public class SQLDao {
     /**
      * select all rows in the warehouses table
      */
-    public Map<String, Shape> selectAll() {
-        String sql = "select shape.id, shape.name, shape.radius, shape.height from shape";
+    public Map<String, Tuba> selectAll() {
+        String sql = "select tuba.id, tuba.pikkus, tuba.laius, tuba.uks from tuba";
 
-        Map<String, Shape> shapes = new HashMap<String, Shape>();
+        Map<String, Tuba> shapes = new HashMap<String, Tuba>();
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement();
@@ -38,12 +38,12 @@ public class SQLDao {
 
             // loop through the result set
             while (rs.next()) {
-                Shape shape = new Shape();
+                Tuba shape = new Tuba();
                 //Use ID instead of shape.name for key in dictionary if multiple same named shapes
-                //String id = rs.getString("id");
-                shape.name = rs.getString("name");
-                shape.radius = rs.getFloat("radius");
-                shape.height = rs.getFloat("height");
+                shape.name = rs.getString("id");
+                shape.pikkus = rs.getFloat("pikkus");
+                shape.laius = rs.getFloat("laius");
+                shape.uks = rs.getFloat("uks");
                 shapes.put(shape.name, shape);
             }
         } catch (SQLException e) {

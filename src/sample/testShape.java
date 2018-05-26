@@ -1,6 +1,7 @@
 package sample;
 
 import java.util.Map;
+import java.util.Scanner;
 
 //JavaFx part
 import javafx.application.Application;
@@ -9,7 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import static sample.Controller.dao;
+//import static sample.Controller.dao;
 
 public class testShape extends Application {
 
@@ -22,26 +23,28 @@ public class testShape extends Application {
     }
 
     public static void main(String[] args) {
-        Shape kujund = new Shape("kolmnurk", 2, 3);
-        Shape sittKujund = new Shape();
+        String ruum;
+        Float pikkus;
+        Float laius;
+        Float uks;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Sisesta ruumi andmed: ID, Pikkus, Laius, Uks");
+        ruum = scanner.nextLine();
+        pikkus = scanner.nextFloat();
+        laius = scanner.nextFloat();
+        uks = scanner.nextFloat();
+        scanner.close();
+        Tuba tuba = new Tuba(ruum, pikkus, laius, uks);
+        tuba.give_info();
 
-
-        Volume silindriRuumala = new Volume("Silinder", 60, 40);
-        Volume koonuseRuumala = new Volume("Koonus", 60, 40);
-        silindriRuumala.volume = silindriRuumala.getVolume();
-        koonuseRuumala.volume = koonuseRuumala.getVolume();
-        System.out.println(silindriRuumala.volume);
-        System.out.println(koonuseRuumala.volume);
         SQLDao dao = new SQLDao();
-        Map<String, Shape> data = dao.selectAll();
-        Shape Silinder = data.get("Silinder");
-        Volume SilinderVolume = new Volume(Silinder);
-        System.out.println("girrlrl");
-        System.out.println(SilinderVolume.volume);
-        Silinder.give_info();
-        System.out.println(Silinder.height);
+        Map<String, Tuba> data = dao.selectAll();
+        //Tuba Silinder = data.get("Silinder");
+        Tuba sqlTuba = data.get("13");
+        sqlTuba.give_info();
 
-        //launch(args);
+
+        launch(args);
 
     }
 }
